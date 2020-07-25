@@ -1,4 +1,4 @@
-# tellie-takehome
+# tellie-takehome ** UNFINISHED **
 A take home assignment for Tellie.
 
 # Requirements:
