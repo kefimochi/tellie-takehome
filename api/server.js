@@ -1,7 +1,7 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
-const UsersRouter = require("./users/userRouter");
+const creatorRouter = require("./users/creatorRouter");
 const EpisodesRouter = require("./episodes/episodeRouter");
 const AuthRouter = require("./auth/authRouter");
 const auth = require("./auth/authMiddleware");
@@ -11,9 +11,9 @@ server.use(cors());
 server.use(helmet());
 server.use(express.json());
 server.use("/api", AuthRouter);
-server.use("/api/users", UsersRouter);
 
-// Can only see all created episodes if logged in
+// Can only accessed if logged in
 server.use("/api/episodes", auth, EpisodesRouter);
+server.use("/api/creator", auth, creatorRouter);
 
 module.exports = server;

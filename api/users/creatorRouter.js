@@ -1,10 +1,43 @@
 const db = require("../data/DBconfig");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
-const UserRouter = require("express").Router();
+const router = require("express").Router();
 
-// UserRouter.post("/login", (req, res) => {
+router.post("/:creator_id/episode", (req, res) => {
+  // Can't have the same username as either creator or player.
+  // This gets enforced on /register for simplicity.
+
+  if (
+    !req.body.title ||
+    !req.body.questions ||
+    req.body.questions.length === 0
+  ) {
+    res.status(400).json({
+      errorMessage:
+        "Please provide appropriate title & at least one question for the episode.",
+    });
+  } else {
+    if (db.verifyCreator(req.params.creator_id)) {
+      const gg = db.createEpisode({
+        ...req.body,
+        creator_id: req.params.creator_id,
+      });
+      console.log(gg);
+      // .then((episode) => {
+      //   console.log("episode in router", episode);
+      //   res.status(200).json({ episode });
+      // })
+      // .catch((err) =>
+      //   res
+      //     .status(500)
+      //     .json({ error: "There was trouble when accessing the user" })
+      // );
+    } else {
+      res.status(500).json({ error: "Please log in as a verified creator." });
+    }
+  }
+});
+
+// route.post("/login", (req, res) => {
 //   if (!req.body.username || !req.body.password) {
 //     res.status(400).json({
 //       errorMessage: "Please provide username and password for the user.",
@@ -28,7 +61,7 @@ const UserRouter = require("express").Router();
 //   }
 // });
 
-// UserRouter.put("/:id", (req, res) => {
+// route.put("/:id", (req, res) => {
 //   if (!req.body.name || !req.body.completed) {
 //     res.status(400).json({
 //       errorMessage: "Please provide name and completed for the user.",
@@ -50,7 +83,7 @@ const UserRouter = require("express").Router();
 //   }
 // });
 
-// UserRouter.get("/logout", (req, res) => {
+// route.get("/logout", (req, res) => {
 //   if (req.session) {
 //     req.session.destroy((err) => {
 //       if (err) {
@@ -75,4 +108,4 @@ const UserRouter = require("express").Router();
 //   return jwt.sign(payload, secret, options);
 // }
 
-module.exports = UserRouter;
+module.exports = router;

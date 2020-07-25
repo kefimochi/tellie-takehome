@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+// Normally the secret would be in .env for additional security
 const secret = "idsfwgTARDISr37yehiwfe7rgfsdf73wupp999(^%$";
 
 module.exports = (req, res, next) => {
